@@ -1,0 +1,37 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{item.name}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon class="material-icons">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2>{{item.name}} nearly expiration date!</h2>
+        <p>
+          Right now you have {{item.quantity}} {{item.name}} going to waste.
+        </p>
+
+        <h4>Recipe suggestion</h4>
+        <p>
+          {{getRecipe(item.name)}}
+        </p>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button href="{{item.href}}" target="_blank" md-autofocus>
+        See recipe
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="answer('not useful')">
+       Dismiss
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
