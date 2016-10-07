@@ -103,7 +103,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 'Blueberries': 'images/mirtilo.jpg',
                 'Onions': 'images/cebola.jpeg',
                 'Lettuces': 'images/alface.jpg',
-                'Garlics': 'images/alho.jpeg'
+                'Garlics': 'images/alho.jpeg',
+                'Carrots': 'images/carrots.jpg'
             };
 
             return itemImages[item];
@@ -134,7 +135,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 case 'Mirtilos': return 'Blueberries';
                 case 'Cebolas': return 'Onions';
                 case 'Alface': return 'Lettuces';
-                case 'Alhos': return 'Garlics';
+                case 'Alho': return 'Garlics';
+                case 'Cenouras': return 'Carrots';
             }
         }
 
