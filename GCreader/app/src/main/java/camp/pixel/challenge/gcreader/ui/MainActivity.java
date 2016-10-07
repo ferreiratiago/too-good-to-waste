@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private static final String DIGITAL_OCEAN_ENDPOINT = "http://188.166.155.168:3000/shops/";
+    private static final String DIGITAL_OCEAN_ENDPOINT = "http://toogoodtowaste.us:3000/shops/";
 
     private static final int DELAY_BETWEEN_SCANS = 1000; // 1 second
 

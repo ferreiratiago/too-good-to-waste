@@ -140,7 +140,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
         var poller = function () {
             $http({
-                url: 'http://188.166.155.168:3000/expiring/aristides@pixels.camp?range=10',
+                url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;

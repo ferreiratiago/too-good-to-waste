@@ -7,7 +7,7 @@ Notification.requestPermission().then(function(result) {
   console.log(`Permission ${result}`);
 });
 
-var socket = io.connect('http://188.166.155.168:9000');
+var socket = io.connect('http://toogoodtowaste.us:9000');
 
 function buildProductInfo(p) {
     var daysLeft = Math.floor((new Date(p.expirationDate) - new Date()) / (1000 * 3600 * 24));
