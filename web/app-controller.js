@@ -7,7 +7,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
     .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout, orderByFilter) {
         $scope.showAdvanced = function (ev, item) {
             $mdDialog.show({
-                templateUrl: 'web/dialog-template.html',
+                templateUrl: 'dialog-template.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
@@ -87,14 +87,14 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
         $scope.getItemImage = function (item) {
             var itemImages = {
-                'Tomates': 'web/images/tomato.jpg',
-                'Iogurtes': 'web/images/iogurte.jpg',
-                'Queijo Fresco': 'web/images/queijo_fresco.jpeg',
-                'Batatas': 'web/images/batatas.png',
-                'Mirtilos': 'web/images/mirtilo.jpg',
-                'Cebolas': 'web/images/cebola.jpeg',
-                'Alface': 'web/images/alface.jpg',
-                'Alhos': 'web/images/alho.jpeg'
+                'Tomates': 'images/tomato.jpg',
+                'Iogurtes': 'images/iogurte.jpg',
+                'Queijo Fresco': 'images/queijo_fresco.jpeg',
+                'Batatas': 'images/batatas.png',
+                'Mirtilos': 'images/mirtilo.jpg',
+                'Cebolas': 'images/cebola.jpeg',
+                'Alface': 'images/alface.jpg',
+                'Alhos': 'images/alho.jpeg'
             };
 
             return itemImages[item];
