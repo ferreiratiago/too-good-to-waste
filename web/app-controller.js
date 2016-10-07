@@ -4,35 +4,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             .primaryPalette('green')
             .accentPalette('lime');
     })
-    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout) {
-        function DialogController($scope, $mdDialog, item) {
-            $scope.item = item;
-
-            $scope.hide = function () {
-                $mdDialog.hide();
-            };
-
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-
-            $scope.answer = function (answer) {
-                $mdDialog.hide(answer);
-            };
-
-            $scope.getRecipe = function (item) {
-                var recipes = {
-                    'Tomates': 'Tomato and Basil Pasta. With garden-ripened tomatoes and fragrant fresh basil, this pasta dish ' +
-                        'needs very little enhancement to taste divine. Just add some sliced garlic, extra-virgin olive oil, ' +
-                        'and burrata or mozzarella cheese, and dinner is ready.',
-                    'Iogurtes': 'Don\'t forget to use the milk in your breakfast!',
-                    'Queijo Fresco': 'Why don\'t you try an omelette?'
-                }
-
-                return recipes[item]
-            }
-        }
-
+    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout, orderByFilter) {
         $scope.showAdvanced = function (ev, item) {
             $mdDialog.show({
                 templateUrl: 'web/dialog-template.html',
@@ -42,7 +14,33 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 locals: {
                     item: item
                 },
-                controller: DialogController
+                controller: function DialogController($scope, $mdDialog, item) {
+                    $scope.item = item;
+
+                    $scope.hide = function () {
+                        $mdDialog.hide();
+                    };
+
+                    $scope.cancel = function () {
+                        $mdDialog.cancel();
+                    };
+
+                    $scope.answer = function (answer) {
+                        $mdDialog.hide(answer);
+                    };
+
+                    $scope.getRecipe = function (item) {
+                        var recipes = {
+                            'Tomates': 'Tomato and Basil Pasta. With garden-ripened tomatoes and fragrant fresh basil, this pasta dish ' +
+                                'needs very little enhancement to taste divine. Just add some sliced garlic, extra-virgin olive oil, ' +
+                                'and burrata or mozzarella cheese, and dinner is ready.',
+                            'Iogurtes': 'Don\'t forget to use the milk in your breakfast!',
+                            'Queijo Fresco': 'Why don\'t you try an omelette?'
+                        }
+
+                        return recipes[item]
+                    }
+                }
             });
         };
 
@@ -121,6 +119,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;
+
+                items = orderByFilter(items, 'item.expirationDate', true) || [];
 
                 $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
                 $scope.todaysItems = items.filter(isExpiringToday);
