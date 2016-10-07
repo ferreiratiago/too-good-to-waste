@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
 app.use(function(req, res, next) {
-    console.log('setting Access-Control-Allow-Origin');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -36,14 +35,9 @@ var ShopSchema = mongoose.Schema({
     items: [ProductSchema]
 });
 
-var Product = app.product = restful.model('product', ProductSchema)
-    .methods(['get', 'post', 'put', 'delete'])
-    .register(app, '/products');
-
 var Shop = app.shop = restful.model('shop', ShopSchema)
     .methods(['get', 'post', 'put', 'delete']);
     Shop.register(app, '/shops');
-
 
 function fetchExpiredItems(userId, rangeDays, callback) {
     let limitDate = new Date();
@@ -98,6 +92,30 @@ app.get('/notify/:userId', (req, res, next) => {
         res.send(JSON.stringify(expiringItems, undefined, 4));
         next();
     });
+});
+
+app.delete('/products/:productId', (req, res, next) => {
+    let productId = req.params.productId;
+
+    let shops = Shop.find({items:{$elemMatch: {_id: productId}}});
+        shops.exec((error, shops) => {
+            console.log('shops ', JSON.stringify(shops, null, 4));
+            let shop = shops[0];
+
+            if(shop) {
+                let item = shop.items.id(productId);
+                item.remove();
+                shop.save();
+                if (shop.items.length === 0) {
+                    shop.remove();
+                    console.log('DELETED SHOP', shop);
+                }
+                shop.save();
+                res.send('DELETED: ' + JSON.stringify(item));
+            } else {
+                res.send(`ITEM: ${productId} not found`);
+            }
+        });
 });
 
 app.listen(3000);
