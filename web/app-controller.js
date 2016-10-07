@@ -30,15 +30,24 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                     };
 
                     $scope.getRecipe = function (item) {
-                        var recipes = {
-                            'Tomates': 'Tomato and Basil Pasta. With garden-ripened tomatoes and fragrant fresh basil, this pasta dish ' +
-                                'needs very little enhancement to taste divine. Just add some sliced garlic, extra-virgin olive oil, ' +
-                                'and burrata or mozzarella cheese, and dinner is ready.',
-                            'Iogurtes': 'Don\'t forget to use the milk in your breakfast!',
-                            'Queijo Fresco': 'Why don\'t you try an omelette?'
-                        }
+                        // console.log(item);
 
-                        return recipes[item]
+                        // $http({
+                        //     url: 'http://food2fork.com/api/search?key=4d651dcc83384a4a4b981b83a787a418&q='+item,
+                        //     method: 'GET'
+                        // }).then(function(r) {
+                        //     console.log(r);
+                        // });
+
+                        // var recipes = {
+                        //     'Tomates': 'Tomato and Basil Pasta. With garden-ripened tomatoes and fragrant fresh basil, this pasta dish ' +
+                        //         'needs very little enhancement to taste divine. Just add some sliced garlic, extra-virgin olive oil, ' +
+                        //         'and burrata or mozzarella cheese, and dinner is ready.',
+                        //     'Iogurtes': 'Don\'t forget to use the milk in your breakfast!',
+                        //     'Queijo Fresco': 'Why don\'t you try an omelette?'
+                        // }
+
+                        // return recipes[item]
                     }
                 }
             });
@@ -87,14 +96,14 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
         $scope.getItemImage = function (item) {
             var itemImages = {
-                'Tomates': 'images/tomato.jpg',
-                'Iogurtes': 'images/iogurte.jpg',
-                'Queijo Fresco': 'images/queijo_fresco.jpeg',
-                'Batatas': 'images/batatas.png',
-                'Mirtilos': 'images/mirtilo.jpg',
-                'Cebolas': 'images/cebola.jpeg',
-                'Alface': 'images/alface.jpg',
-                'Alhos': 'images/alho.jpeg'
+                'Tomatoes': 'images/tomato.jpg',
+                'Yogurts': 'images/iogurte.jpg',
+                'Fresh Cheese': 'images/queijo_fresco.jpeg',
+                'Potatoes': 'images/batatas.png',
+                'Blueberries': 'images/mirtilo.jpg',
+                'Onions': 'images/cebola.jpeg',
+                'Lettuces': 'images/alface.jpg',
+                'Garlics': 'images/alho.jpeg'
             };
 
             return itemImages[item];
@@ -116,6 +125,19 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             return isExpiringAfterToday;
         }
 
+        function translate(text) {
+            switch(text) {
+                case 'Tomates': return 'Tomatoes';
+                case 'Iogurtes': return 'Yogurts';
+                case 'Queijo Fresco': return 'Fresh Cheese';
+                case 'Batatas': return 'Potatoes';
+                case 'Mirtilos': return 'Blueberries';
+                case 'Cebolas': return 'Onions';
+                case 'Alface': return 'Lettuces';
+                case 'Alhos': return 'Garlics';
+            }
+        }
+
         var poller = function () {
             $http({
                 url: 'http://188.166.155.168:3000/expiring/aristides@pixels.camp?range=10',
@@ -124,6 +146,10 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 items = response.data;
 
                 items = orderByFilter(items, 'item.expirationDate', true) || [];
+                items = items.map(i => {
+                    i.name = translate(i.name)
+                    return i;
+                });
 
                 $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
                 $scope.todaysItems = items.filter(isExpiringToday);

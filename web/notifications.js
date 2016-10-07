@@ -35,7 +35,7 @@ var showNotifcation = function(data) {
     });
 
     n.addEventListener("show", function() {
-        var audio = new Audio("web/sad.mp3");
+        var audio = new Audio("web/sounds/sad.mp3");
         audio.play();
     }, false);
 
