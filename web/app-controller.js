@@ -4,7 +4,13 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             .primaryPalette('green')
             .accentPalette('lime');
     })
-    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout, orderByFilter) {
+    .service('helper', function Helper() {
+        var DAY_MILLIS = 1000 * 3600 * 24;
+        this.daysLeft = function (expirationDate) {
+            return Math.floor((new Date(expirationDate) - new Date()) / DAY_MILLIS);
+        };
+    })
+    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout, orderByFilter, helper) {
         $scope.showAdvanced = function (ev, item) {
             $mdDialog.show({
                 templateUrl: 'dialog-template.html',
@@ -149,9 +155,9 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             }).then(function successCallback(response) {
                 items = response.data;
 
-                items = orderByFilter(items, 'item.expirationDate', true) || [];
                 items = items.map(i => {
                     i.name = translate(i.name);
+                    i.daysLeft = helper.daysLeft(i.expirationDate);
                     return i;
                 });
 
