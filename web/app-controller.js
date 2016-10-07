@@ -123,10 +123,6 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             var itemExpirationDate = new Date(item.expirationDate);
             var isExpiringAfterToday = (itemExpirationDate.getTime() >= tomorrow.getTime());
 
-            if (item.name == 'Fresh Cheese') {
-                console.log(itemExpirationDate.getTime(), tomorrow.getTime())
-
-            }
             return isExpiringAfterToday;
         }
 
