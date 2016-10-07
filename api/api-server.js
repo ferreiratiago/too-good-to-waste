@@ -40,6 +40,7 @@ var Shop = app.shop = restful.model('shop', ShopSchema)
 
 function fetchExpiredItems(userId, rangeDays, callback) {
     let limitDate = new Date();
+    rangeDays = new Number(rangeDays);
     limitDate.setDate(limitDate.getDate() + rangeDays);
 
     console.log('limitDate', limitDate);
@@ -54,6 +55,9 @@ function fetchExpiredItems(userId, rangeDays, callback) {
                     .reduce((allItems, shop) => {
                         return allItems.concat(shop.items);
                     }, [])
+                    .filter((item) => {
+                        return item.expirationDate < limitDate;
+                    })
                     .sort((item1, item2) => {
                         return item1 < item2;
                     });
