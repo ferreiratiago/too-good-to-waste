@@ -16,7 +16,7 @@ The audience is everyone that loves food and gets annoyed when they go to waste.
 
 Because such an amazing project takes time and a lot of challenges we have used a bunch of technologies:
 
- * Node.js + Expresso
+ * Node.js + Express
  * MongoDB
  * Socket.IO
  * AngularJS + Angular Material
