@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 22
 
-        versionCode 1
+        versionCode getGitCommitNumber().toInteger()
         versionName '1.0'
     }
 
@@ -27,3 +27,20 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'me.dm7.barcodescanner:zxing:1.9'
 }
+
+def getGitCommitNumber(referenceName = 'HEAD') {
+    return executeShell("git rev-list --count ${referenceName}")
+}
+
+def executeShell(command) {
+    def process = command.execute([], project.rootDir)
+
+    process.waitFor()
+
+    if (process.exitValue() != 0) {
+        throw new RuntimeException(process.getErrorStream().text)
+    }
+
+    return process.text.trim()
+}
+
