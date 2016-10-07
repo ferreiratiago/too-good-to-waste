@@ -1,4 +1,4 @@
-# To Good, To Waste
+# Too Good, To Waste
 
 ## Introduction
 
