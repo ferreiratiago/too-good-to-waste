@@ -105,8 +105,8 @@
 
       <main class="mdl-layout__content mdl-color--grey-100">
       <div ng-controller="AppCtrl">
-        <div id="bind-html-with-sanitize" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-           <md-list style="width: 100%">
+        <div ng-if="todaysItems.length > 0" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+           <md-list>
             <md-subheader class="md-no-sticky">Expiring today:</md-subheader>
             <md-list-item ng-repeat="item in todaysItems" ng-click="goToItem(item, $event)" class="noright">
               <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
@@ -116,8 +116,8 @@
             </md-list-item>
           </md-list>
         </div>
-        <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-           <md-list style="width: 100%">
+        <div ng-if="nextExpiringItems.length > 0" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+           <md-list>
             <md-subheader class="md-no-sticky">Next expiring products:</md-subheader>
             <md-list-item ng-repeat="item in nextExpiringItems" ng-click="goToItem(item, $event)" class="noright">
               <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
