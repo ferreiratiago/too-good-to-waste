@@ -4,7 +4,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             .primaryPalette('green')
             .accentPalette('lime');
     })
-    .controller('AppCtrl', function ($scope, $mdDialog) {
+    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout) {
         function DialogController($scope, $mdDialog, item) {
             $scope.item = item;
 
@@ -78,13 +78,26 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
         $scope.doSecondaryAction = function (event) {
             $mdDialog.show(
-                $mdDialog.alert()
-                .title('Remove')
-                .textContent('Have you used it already? Nice!')
+                $mdDialog.confirm()
+                .title('Remove?')
+                .textContent('Have you used it already? Nice! No waste. Well done mate.')
                 .ok('We are done here!')
+                .cancel('Not yet...')
                 .targetEvent(event)
             );
         };
+
+        $scope.getItemImage = function (item) {
+            var itemImages = {
+                'Tomates': 'web/images/tomato.jpg',
+                'Iogurtes': 'web/images/milk.jpg',
+                'Queijo Fresco': 'web/images/eggs.jpg',
+                'Batatas': 'web/images/batatas.png',
+                'Mirtilos': 'web/images/mirtilo.jpg'
+            };
+
+            return itemImages[item];
+        }
 
         function isExpiringToday(item) {
             var today = new Date();
@@ -102,38 +115,18 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             return isExpiringAfterToday;
         }
 
-        // REQUEST
-        var mockItems = {
-            "date": "2016-10-07T10:00:00+00:00",
-            "userId": "aristides@pixels.camp",
-            "items": [{
-                "name": "Tomates",
-                "quantity": 2000,
-                "expirationDate": "2016-10-07T20:03:19+00:00",
-                "packageDate": "2016-10-06T20:03:19+00:00"
-            }, {
-                "name": "Iogurtes",
-                "quantity": 2000,
-                "expirationDate": "2016-10-08T20:03:19+00:00",
-                "packageDate": "2016-10-06T20:03:19+00:00"
-            }, {
-                "name": "Queijo Fresco",
-                "quantity": 2000,
-                "expirationDate": "2016-10-08T20:03:19+00:00",
-                "packageDate": "2016-10-06T20:03:19+00:00"
-            }]
-        };
+        var poller = function () {
+            $http({
+                url: 'http://188.166.155.168:3000/expiring/aristides@pixels.camp?range=10',
+                method: 'GET'
+            }).then(function successCallback(response) {
+                items = response.data;
 
-        $scope.getItemImage = function (item) {
-            var itemImages = {
-                'Tomates': 'web/images/tomato.jpg',
-                'Iogurtes': 'web/images/milk.jpg',
-                'Queijo Fresco': 'web/images/eggs.jpg'
-            };
+                $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
+                $scope.todaysItems = items.filter(isExpiringToday);
 
-            return itemImages[item];
+                $timeout(poller, 1000)
+            }, function errorCallback(response) {})
         }
-
-        $scope.nextExpiringItems = mockItems.items.filter(isExpiringAfterToday);
-        $scope.todaysItems = mockItems.items.filter(isExpiringToday);
+        poller();
     });
