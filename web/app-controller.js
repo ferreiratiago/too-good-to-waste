@@ -113,7 +113,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
         function isExpiringToday(item) {
             var today = new Date();
             var itemExpirationDate = new Date(item.expirationDate);
-            var isToday = (today.toDateString() === itemExpirationDate.toDateString());
+            var isToday = (today.getTime() === itemExpirationDate.getTime());
 
             return isToday;
         }
@@ -121,8 +121,12 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
         function isExpiringAfterToday(item) {
             var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
             var itemExpirationDate = new Date(item.expirationDate);
-            var isExpiringAfterToday = (itemExpirationDate.toDateString() >= tomorrow.toDateString());
+            var isExpiringAfterToday = (itemExpirationDate.getTime() >= tomorrow.getTime());
 
+            if (item.name == 'Fresh Cheese') {
+                console.log(itemExpirationDate.getTime(), tomorrow.getTime())
+
+            }
             return isExpiringAfterToday;
         }
 
