@@ -83,7 +83,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             );
         };
 
-        $scope.doSecondaryAction = function (event) {
+        $scope.deleteItem = function (event, item) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .title('Remove?')
@@ -91,7 +91,9 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 .ok('We are done here!')
                 .cancel('Not yet...')
                 .targetEvent(event)
-            );
+            ).then(() => {
+                removeItem(item._id);
+            });
         };
 
         $scope.getItemImage = function (item) {
@@ -149,7 +151,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
                 items = orderByFilter(items, 'item.expirationDate', true) || [];
                 items = items.map(i => {
-                    i.name = translate(i.name)
+                    i.name = translate(i.name);
                     return i;
                 });
 
@@ -159,5 +161,13 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 $timeout(poller, 1000)
             }, function errorCallback(response) {})
         }
+
+        function removeItem(itemId) {
+            $http({
+                url: 'http://toogoodtowaste.us:3000/products/'+itemId,
+                method: 'DELETE'
+            });
+        }
+
         poller();
     });

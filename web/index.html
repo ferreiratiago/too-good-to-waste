@@ -112,7 +112,7 @@
               <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
               <p>{{ item.name }}</p>
               <md-icon aria-label="Menu" ng-click="showAdvanced($event, item)" class="md-secondary material-icons">assignment</md-icon>
-              <md-icon aria-label="Menu" ng-click="doSecondaryAction($event)" class="md-secondary gg,kykmaterial-icons">do_not_disturb</md-icon>
+              <md-icon aria-label="Menu" ng-click="deleteItem($event, item)" class="md-secondary gg,kykmaterial-icons">do_not_disturb</md-icon>
             </md-list-item>
           </md-list>
         </div>
@@ -123,7 +123,7 @@
               <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
               <p>{{ item.name }}</p>
               <md-icon aria-label="Menu" ng-click="showAdvanced($event, item)" class="md-secondary material-icons">assignment</md-icon>
-              <md-icon aria-label="Menu" ng-click="doSecondaryAction($event)" class="md-secondary material-icons">do_not_disturb</md-icon>
+              <md-icon aria-label="Menu" ng-click="deleteItem($event, item)" class="md-secondary material-icons">do_not_disturb</md-icon>
             </md-list-item>
           </md-list>
         </div>
