@@ -88,10 +88,13 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
         $scope.getItemImage = function (item) {
             var itemImages = {
                 'Tomates': 'web/images/tomato.jpg',
-                'Iogurtes': 'web/images/milk.jpg',
-                'Queijo Fresco': 'web/images/eggs.jpg',
+                'Iogurtes': 'web/images/iogurte.jpg',
+                'Queijo Fresco': 'web/images/queijo_fresco.jpeg',
                 'Batatas': 'web/images/batatas.png',
-                'Mirtilos': 'web/images/mirtilo.jpg'
+                'Mirtilos': 'web/images/mirtilo.jpg',
+                'Cebolas': 'web/images/cebola.jpeg',
+                'Alface': 'web/images/alface.jpg',
+                'Alhos': 'web/images/alho.jpeg'
             };
 
             return itemImages[item];

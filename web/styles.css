@@ -237,6 +237,10 @@ _:-ms-input-placeholder, :root .demo-graph {
     top: initial;
 }
 
+md-list {
+  width:  100%;
+}
+
 md-list-item .md-avatar {
     border: 1px solid rgb(198, 255, 0);
 }
