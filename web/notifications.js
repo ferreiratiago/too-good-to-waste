@@ -13,9 +13,9 @@ function buildProductInfo(p) {
     var daysLeft = Math.floor((new Date(p.expirationDate) - new Date()) / (1000 * 3600 * 24));
 
     switch(daysLeft){
-        case 0:  return `${p.name} are expering today!`;
-        case 1:  return `${p.name} are expering in 1 day!`;
-        default: return `${p.name} are expering in ${daysLeft} days!`;
+        case 0:  return `${p.name} are expiring today!`;
+        case 1:  return `${p.name} are expiring in 1 day!`;
+        default: return `${p.name} are expiring in ${daysLeft} days!`;
     }
 }
 
