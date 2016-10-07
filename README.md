@@ -30,8 +30,6 @@ Because such an amazing project takes time and a lot of challenges we have used 
 * Ricardo Amaral (https://pixels.camp/rfgamaral)
 * Tiago Lopes (https://pixels.camp/ferreiratiago)
 
-## Code repository
+## License
 
-You can find our code at: https://github.com/rfgamaral/TooGoodToWaste
-
-The code is released under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+Use of this source code is governed by an MIT-style license that can be found in the [LICENSE](LICENSE) file.
