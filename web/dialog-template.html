@@ -17,15 +17,14 @@
           Right now you have {{item.quantity}} {{item.name}} going to waste.
         </p> -->
 
-        <h4>Recipe suggestions</h4>
         <p>
-          {{getRecipe(item.name)}}
+          <h4 ng-bind-html="recipe.title"></h4>
+          <img src="{{recipe.image}}">
         </p>
       </div>
     </md-dialog-content>
-
     <md-dialog-actions layout="row">
-      <md-button href="{{item.href}}" target="_blank" md-autofocus>
+      <md-button ng-href="{{recipe.url}}" target="_blank" md-autofocus>
         See recipe
       </md-button>
       <span flex></span>

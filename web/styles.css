@@ -255,3 +255,11 @@ md-list-item .md-avatar {
     margin:  15px 0;
     font-size:  18px;
 }
+
+md-dialog-content {
+    text-align:  center;
+}
+
+md-dialog-content img {
+    width: 100%;
+}

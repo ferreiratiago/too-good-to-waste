@@ -48,6 +48,12 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                     return 'Carrots';
             }
         };
+
+        this.getRandomIntInclusive = function (min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
     })
     .controller('AppCtrl', function ($scope, $mdDialog, $http, $interval, orderByFilter, helper) {
 
@@ -61,8 +67,23 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                 locals: {
                     item: item
                 },
-                controller: function DialogController($scope, $mdDialog, item) {
+                controller: function DialogController($scope, $mdDialog, item, helper) {
                     $scope.item = item;
+
+                    // get recipe
+                    $http({
+                        url: 'http://toogoodtowaste.us:80/api/search?key=4d651dcc83384a4a4b981b83a787a418&q=' + item.name,
+                        method: 'GET'
+                    }).then(function (r) {
+                        var randomRecipeIndex = helper.getRandomIntInclusive(0, r.data.count);
+                        var recipe = r.data.recipes[randomRecipeIndex];
+
+                        $scope.recipe = {
+                            title: recipe.title,
+                            image: recipe.image_url,
+                            url: recipe.source_url
+                        };
+                    });
 
                     $scope.hide = function () {
                         $mdDialog.hide();
@@ -75,27 +96,6 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                     $scope.answer = function (answer) {
                         $mdDialog.hide(answer);
                     };
-
-                    $scope.getRecipe = function (item) {
-                        // console.log(item);
-
-                        // $http({
-                        //     url: 'http://food2fork.com/api/search?key=4d651dcc83384a4a4b981b83a787a418&q='+item,
-                        //     method: 'GET'
-                        // }).then(function(r) {
-                        //     console.log(r);
-                        // });
-
-                        // var recipes = {
-                        //     'Tomates': 'Tomato and Basil Pasta. With garden-ripened tomatoes and fragrant fresh basil, this pasta dish ' +
-                        //         'needs very little enhancement to taste divine. Just add some sliced garlic, extra-virgin olive oil, ' +
-                        //         'and burrata or mozzarella cheese, and dinner is ready.',
-                        //     'Iogurtes': 'Don\'t forget to use the milk in your breakfast!',
-                        //     'Queijo Fresco': 'Why don\'t you try an omelette?'
-                        // }
-
-                        // return recipes[item]
-                    }
                 }
             });
         };
