@@ -55,7 +55,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
             return Math.floor(Math.random() * (max - min + 1)) + min;
         };
     })
-    .controller('AppCtrl', function ($scope, $mdDialog, $http, $interval, orderByFilter, helper) {
+    .controller('AppCtrl', function (HOSTNAME, $scope, $mdDialog, $http, $interval, orderByFilter, helper) {
 
 
         $scope.showAdvanced = function (ev, item) {
@@ -72,7 +72,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
                     // get recipe
                     $http({
-                        url: 'http://toogoodtowaste.us:80/api/search?key=4d651dcc83384a4a4b981b83a787a418&q=' + item.name,
+                        url: 'http://' + HOSTNAME + ':80/api/search?key=4d651dcc83384a4a4b981b83a787a418&q=' + item.name,
                         method: 'GET'
                     }).then(function (r) {
                         var randomRecipeIndex = helper.getRandomIntInclusive(0, r.data.count);
@@ -159,7 +159,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
             return itemImages[item];
         }
 
-        var socket = io.connect('http://toogoodtowaste.us:9000/');
+        var socket = io.connect('http://' + HOSTNAME + ':9000/');
 
         socket.on('connect', function (data) {
             console.log('Just connected');
@@ -175,8 +175,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function updateProducts() {
             $http({
-                // url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
-                url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
+                url: 'http://' + HOSTNAME + ':3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;
@@ -197,8 +196,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function removeItem(itemId) {
             $http({
-                // url: 'http://localhost:3000/products/' + itemId,
-                url: 'http://toogoodtowaste.us:3000/products/' + itemId,
+                url: 'http://' + HOSTNAME + ':3000/products/' + itemId,
                 method: 'DELETE'
             }).then(function () {
                 updateProducts();
