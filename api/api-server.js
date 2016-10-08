@@ -39,7 +39,12 @@ var Shop = app.shop = restful.model('shop', ShopSchema)
     .methods(['get', 'post', 'put', 'delete']);
     Shop.register(app, '/shops');
 
+function compareByExpirationDateASC(item1, item2) {
+    return item1.expirationDate < item2.expirationDate;
+};
+
 function fetchExpiredItems(userId, rangeDays, callback) {
+    let now = new Date();
     let limitDate = new Date();
     rangeDays = new Number(rangeDays);
     limitDate.setDate(limitDate.getDate() + rangeDays);
@@ -57,18 +62,19 @@ function fetchExpiredItems(userId, rangeDays, callback) {
                         return allItems.concat(shop.items);
                     }, [])
                     .filter((item) => {
+                        return item.expirationDate >= now;
+                    })
+                    .filter((item) => {
                         return item.expirationDate < limitDate;
                     })
-                    .sort((item1, item2) => {
-                        return item1 < item2;
-                    });
+                    .sort(compareByExpirationDateASC);
             }
 
             callback(error, items);
         });
 }
 
-app.get('/expiring/:userId/', function onGetExpiring(req, res, next) {
+function fetchExpiring(req, res, next) {
     let userId = req.params.userId;
     let rangeDays = req.query.range || 2;
 
@@ -78,6 +84,32 @@ app.get('/expiring/:userId/', function onGetExpiring(req, res, next) {
         }
         res.send(JSON.stringify(expiringItems, undefined, 4));
     });
+}
+
+// user/:userId/products/all
+// user/:userId/products/expired
+// user/:userId/products/expiring
+// user/:userId/products/:productId
+app.get('/expiring/:userId/', fetchExpiring);
+app.get('/user/:userId/products/expiring', fetchExpiring);
+app.get('/user/:userId/products/expired', function fetchExpired(req, res, next) {
+    let userId = req.params.userId;
+    let limitDate = new Date();
+
+    Shop.find({userId: userId, items: {$elemMatch: {expirationDate: {$lt: limitDate}}}})
+        .exec((error, shops) => {
+            if (error) {
+                res.send(error);
+            }
+
+            let items = shops.reduce((allItems, shop) => {
+                return allItems.concat(shop.items.filter((item) => item.expirationDate < limitDate));
+            }, []);
+
+            items.sort(compareByExpirationDateASC);
+
+            res.send(items);
+        });
 });
 
 app.get('/notify/:userId', (req, res, next) => {
