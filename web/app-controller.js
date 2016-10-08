@@ -19,11 +19,11 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
         };
 
         this.isExpiringAfterToday = function (item) {
-            var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-            var itemExpirationDate = new Date(item.expirationDate);
-            var isExpiringAfterToday = (itemExpirationDate.getTime() >= tomorrow.getTime());
+            var tomorrow = new Date();
+            tomorrow.setHours(0,0,0,0);
+            tomorrow.setDate(tomorrow.getDate() + 1);
 
-            return isExpiringAfterToday;
+            return (new Date(item.expirationDate)) >= tomorrow;
         };
 
         this.translate = function (text) {
@@ -175,8 +175,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function updateProducts() {
             $http({
-                // url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
-                url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
+                url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
+                // url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;
@@ -187,7 +187,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                     return i;
                 });
 
-                $scope.nextExpiringItems = items.filter(helper.isExpiringAfterToday);
+                $scope.nextExpiringItems = items.filter(!helper.isExpiringAfterToday);
                 $scope.todaysItems = items.filter(helper.isExpiringToday);
             }, function errorCallback(response) {
                 $scope.nextExpiringItems = [];
@@ -197,8 +197,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function removeItem(itemId) {
             $http({
-                // url: 'http://localhost:3000/products/' + itemId,
-                url: 'http://toogoodtowaste.us:3000/products/' + itemId,
+                url: 'http://localhost:3000/products/' + itemId,
+                // url: 'http://toogoodtowaste.us:3000/products/' + itemId,
                 method: 'DELETE'
             }).then(function () {
                 updateProducts();
