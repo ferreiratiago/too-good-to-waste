@@ -175,8 +175,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function updateProducts() {
             $http({
-                url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
-                // url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
+                // url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
+                url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;
@@ -197,8 +197,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function removeItem(itemId) {
             $http({
-                url: 'http://localhost:3000/products/' + itemId,
-                // url: 'http://toogoodtowaste.us:3000/products/' + itemId,
+                // url: 'http://localhost:3000/products/' + itemId,
+                url: 'http://toogoodtowaste.us:3000/products/' + itemId,
                 method: 'DELETE'
             }).then(function () {
                 updateProducts();
