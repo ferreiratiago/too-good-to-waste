@@ -15,4 +15,10 @@ io.on('connection', function (socket) {
 
     io.sockets.emit('notification', data);
   });
+
+  socket.on('addedProduct', function (data) {
+    console.log('new product arrived');
+
+    io.sockets.emit('newProduct', data);
+  })
 });

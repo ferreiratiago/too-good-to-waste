@@ -1,4 +1,4 @@
-angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
+angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io'])
     .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
             .primaryPalette('green')
@@ -12,9 +12,9 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
 
         this.isExpiringToday = function (item) {
             var today = new Date();
-            var itemExpirationDate = new Date(item.expirationDate);
-            var isToday = (today.getTime() === itemExpirationDate.getTime());
-
+            var itemExpirationDate = (new Date(item.expirationDate)).setHours(0,0,0,0);
+            var isToday = (new Date()).setHours(0,0,0,0) === itemExpirationDate;
+            console.log(itemExpirationDate, isToday)
             return isToday;
         };
 
@@ -159,9 +159,24 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             return itemImages[item];
         }
 
-        $interval(function () {
+        var socket = io.connect('http://127.0.0.1:9000/');
+
+        socket.on('connect', function (data) {
+            console.log('Just connected');
+
+            updateProducts();
+        })
+
+        socket.on('newProduct', function (data) {
+            console.log(`NEW PRODUCTSSSSS ${data}`);
+
+            updateProducts();
+        });
+
+        function updateProducts() {
             $http({
-                url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
+                url: 'http://localhost:3000/expiring/aristides@pixels.camp?range=10',
+                // url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
             }).then(function successCallback(response) {
                 items = response.data;
@@ -172,19 +187,20 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                     return i;
                 });
 
-                $scope.nextExpiringItems = items.filter(helper.isExpiringAfterToday);
-                $scope.todaysItems = items.filter(helper.isExpiringToday);
-            }, function errorCallback() {
+                $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
+                $scope.todaysItems = items.filter(isExpiringToday);
+            }, function errorCallback(response) {
                 $scope.nextExpiringItems = [];
                 $scope.todaysItems = [];
-            });
-        }, 1000);
-
+            })
+        }
 
         function removeItem(itemId) {
             $http({
-                url: 'http://toogoodtowaste.us:3000/products/' + itemId,
+                url: 'http://localshost:3000/products/' + itemId,
                 method: 'DELETE'
-            });
+            }).then(function () {
+                updateProducts();
+            })
         }
     });
