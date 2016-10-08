@@ -107,7 +107,7 @@
           <div ng-if="todaysItems.length > 0" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
              <md-list>
               <md-subheader class="md-no-sticky">Expiring today:</md-subheader>
-              <md-list-item ng-repeat="item in todaysItems" ng-click="goToItem(item, $event)" class="noright">
+              <md-list-item ng-repeat="item in todaysItems track by item._id" ng-click="goToItem(item, $event)" class="noright">
                 <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
                 <p>{{ item.name }}</p>
                 <md-icon aria-label="Menu" ng-click="showAdvanced($event, item)" class="md-secondary material-icons">assignment</md-icon>
@@ -118,7 +118,7 @@
           <div ng-if="nextExpiringItems.length > 0" class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
              <md-list>
               <md-subheader class="md-no-sticky">Next expiring products:</md-subheader>
-              <md-list-item ng-repeat="item in nextExpiringItems" ng-click="goToItem(item, $event)" class="noright">
+              <md-list-item ng-repeat="item in nextExpiringItems track by item._id" ng-click="goToItem(item, $event)" class="noright">
                 <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
                 <p>{{ item.name }}</p>  <p>{{ item.daysLeft }} days left</p>
                 <md-icon aria-label="Menu" ng-click="showAdvanced($event, item)" class="md-secondary material-icons">assignment</md-icon>
