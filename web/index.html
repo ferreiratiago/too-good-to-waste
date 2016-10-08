@@ -120,7 +120,10 @@
               <md-subheader class="md-no-sticky">Next expiring products:</md-subheader>
               <md-list-item ng-repeat="item in nextExpiringItems track by item._id" ng-click="goToItem(item, $event)" class="noright">
                 <img alt="{{ item.name }}" ng-src="{{ getItemImage(item.name) }}" class="md-avatar" />
-                <p>{{ item.name }}</p>  <p>{{ item.daysLeft }} {{item.daysLeft > 1 ? "days" : "day"}} left</p>
+                <p>
+                  <span>{{ item.name }}</span>
+                  <span class="days-left">{{ item.daysLeft }} {{item.daysLeft > 1 ? "days" : "day"}} left</span>
+                </p>
                 <md-icon aria-label="Menu" ng-click="showAdvanced($event, item)" class="md-secondary material-icons">assignment</md-icon>
                 <md-icon aria-label="Menu" ng-click="deleteItem($event, item)" class="md-secondary material-icons">do_not_disturb</md-icon>
               </md-list-item>

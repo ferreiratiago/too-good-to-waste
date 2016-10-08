@@ -263,3 +263,8 @@ md-dialog-content {
 md-dialog-content img {
     width: 100%;
 }
+
+.days-left {
+    float:  right;
+    margin-right:  10%;
+}
