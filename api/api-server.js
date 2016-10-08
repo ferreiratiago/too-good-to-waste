@@ -37,6 +37,10 @@ var ShopSchema = mongoose.Schema({
 
 var Shop = app.shop = restful.model('shop', ShopSchema)
     .methods(['get', 'post', 'put', 'delete']);
+    Shop.after('post', function(req, res, next) {
+        socket.emit('addedProduct', {});
+        next();
+    })
     Shop.register(app, '/shops');
 
 function compareByExpirationDateASC(item1, item2) {
