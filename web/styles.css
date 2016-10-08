@@ -244,3 +244,14 @@ md-list {
 md-list-item .md-avatar {
     border: 1px solid rgb(198, 255, 0);
 }
+
+.no-products-expiring {
+    padding:  100px 0;
+    text-align: center;
+}
+
+.no-products-expiring .message {
+    color:  #717171;
+    margin:  15px 0;
+    font-size:  18px;
+}

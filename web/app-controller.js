@@ -9,8 +9,49 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
         this.daysLeft = function (expirationDate) {
             return Math.floor((new Date(expirationDate) - new Date()) / DAY_MILLIS);
         };
+
+        this.isExpiringToday = function (item) {
+            var today = new Date();
+            var itemExpirationDate = new Date(item.expirationDate);
+            var isToday = (today.getTime() === itemExpirationDate.getTime());
+
+            return isToday;
+        };
+
+        this.isExpiringAfterToday = function (item) {
+            var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+            var itemExpirationDate = new Date(item.expirationDate);
+            var isExpiringAfterToday = (itemExpirationDate.getTime() >= tomorrow.getTime());
+
+            return isExpiringAfterToday;
+        };
+
+        this.translate = function (text) {
+            switch (text) {
+                case 'Tomates':
+                    return 'Tomatoes';
+                case 'Iogurtes':
+                    return 'Yogurts';
+                case 'Queijo Fresco':
+                    return 'Fresh Cheese';
+                case 'Batatas':
+                    return 'Potatoes';
+                case 'Mirtilos':
+                    return 'Blueberries';
+                case 'Cebolas':
+                    return 'Onions';
+                case 'Alface':
+                    return 'Lettuces';
+                case 'Alho':
+                    return 'Garlics';
+                case 'Cenouras':
+                    return 'Carrots';
+            }
+        };
     })
-    .controller('AppCtrl', function ($scope, $mdDialog, $http, $timeout, orderByFilter, helper) {
+    .controller('AppCtrl', function ($scope, $mdDialog, $http, $interval, orderByFilter, helper) {
+
+
         $scope.showAdvanced = function (ev, item) {
             $mdDialog.show({
                 templateUrl: 'dialog-template.html',
@@ -118,37 +159,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
             return itemImages[item];
         }
 
-        function isExpiringToday(item) {
-            var today = new Date();
-            var itemExpirationDate = new Date(item.expirationDate);
-            var isToday = (today.getTime() === itemExpirationDate.getTime());
-
-            return isToday;
-        }
-
-        function isExpiringAfterToday(item) {
-            var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-            var itemExpirationDate = new Date(item.expirationDate);
-            var isExpiringAfterToday = (itemExpirationDate.getTime() >= tomorrow.getTime());
-
-            return isExpiringAfterToday;
-        }
-
-        function translate(text) {
-            switch(text) {
-                case 'Tomates': return 'Tomatoes';
-                case 'Iogurtes': return 'Yogurts';
-                case 'Queijo Fresco': return 'Fresh Cheese';
-                case 'Batatas': return 'Potatoes';
-                case 'Mirtilos': return 'Blueberries';
-                case 'Cebolas': return 'Onions';
-                case 'Alface': return 'Lettuces';
-                case 'Alho': return 'Garlics';
-                case 'Cenouras': return 'Carrots';
-            }
-        }
-
-        var poller = function () {
+        $interval(function () {
             $http({
                 url: 'http://toogoodtowaste.us:3000/expiring/aristides@pixels.camp?range=10',
                 method: 'GET'
@@ -156,24 +167,24 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize'])
                 items = response.data;
 
                 items = items.map(i => {
-                    i.name = translate(i.name);
+                    i.name = helper.translate(i.name);
                     i.daysLeft = helper.daysLeft(i.expirationDate);
                     return i;
                 });
 
-                $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
-                $scope.todaysItems = items.filter(isExpiringToday);
+                $scope.nextExpiringItems = items.filter(helper.isExpiringAfterToday);
+                $scope.todaysItems = items.filter(helper.isExpiringToday);
+            }, function errorCallback() {
+                $scope.nextExpiringItems = [];
+                $scope.todaysItems = [];
+            });
+        }, 1000);
 
-                $timeout(poller, 1000)
-            }, function errorCallback(response) {})
-        }
 
         function removeItem(itemId) {
             $http({
-                url: 'http://toogoodtowaste.us:3000/products/'+itemId,
+                url: 'http://toogoodtowaste.us:3000/products/' + itemId,
                 method: 'DELETE'
             });
         }
-
-        poller();
     });
