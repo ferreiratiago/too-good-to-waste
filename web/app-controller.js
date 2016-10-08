@@ -18,7 +18,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
             return isToday;
         };
 
-        this.isExpiringAfterToday = function (item) {
+       this.isExpiringAfterToday = function (item) {
             var tomorrow = new Date();
             tomorrow.setHours(0,0,0,0);
             tomorrow.setDate(tomorrow.getDate() + 1);
@@ -187,7 +187,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                     return i;
                 });
 
-                $scope.nextExpiringItems = items.filter(!helper.isExpiringAfterToday);
+                $scope.nextExpiringItems = items.filter(helper.isExpiringAfterToday);
                 $scope.todaysItems = items.filter(helper.isExpiringToday);
             }, function errorCallback(response) {
                 $scope.nextExpiringItems = [];
