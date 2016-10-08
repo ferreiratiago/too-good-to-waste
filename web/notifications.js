@@ -40,7 +40,7 @@ var showNotifcation = function(data) {
     }, false);
 
     n.onclick = function(e) {
-        window.open('https://chennaitribune.files.wordpress.com/2015/02/indian-beggars.jpg', '_blank');
+        window.open('http://toogoodtowaste.us/', '_blank');
     }
 
     setTimeout(n.close.bind(n), 5000);
