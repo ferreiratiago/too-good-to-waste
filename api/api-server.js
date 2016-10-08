@@ -47,6 +47,10 @@ function compareByExpirationDateASC(item1, item2) {
     return item1.expirationDate < item2.expirationDate;
 };
 
+function compareByExpirationDateDSC(item1, item2) {
+    return item1.expirationDate > item2.expirationDate;
+};
+
 function fetchExpiredItems(userId, rangeDays, callback) {
     let now = new Date();
     let limitDate = new Date();
@@ -71,7 +75,7 @@ function fetchExpiredItems(userId, rangeDays, callback) {
                     .filter((item) => {
                         return item.expirationDate < limitDate;
                     })
-                    .sort(compareByExpirationDateASC);
+                    .sort(compareByExpirationDateDSC);
             }
 
             callback(error, items);

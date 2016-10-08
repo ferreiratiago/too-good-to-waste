@@ -7,13 +7,13 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
     .service('helper', function Helper() {
         var DAY_MILLIS = 1000 * 3600 * 24;
         this.daysLeft = function (expirationDate) {
-            return Math.floor((new Date(expirationDate) - new Date()) / DAY_MILLIS);
+            return Math.floor((new Date(expirationDate) - new Date()) / DAY_MILLIS) + 1;
         };
 
         this.isExpiringToday = function (item) {
             var today = new Date();
             var itemExpirationDate = (new Date(item.expirationDate)).setHours(0,0,0,0);
-            var isToday = (new Date()).setHours(0,0,0,0) === itemExpirationDate;
+            var isToday = (new Date()).setHours(0,0,0,0) == itemExpirationDate;
 
             return isToday;
         };
