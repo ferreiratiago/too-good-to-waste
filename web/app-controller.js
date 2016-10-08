@@ -159,7 +159,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
             return itemImages[item];
         }
 
-        var socket = io.connect('http://127.0.0.1:9000/');
+        var socket = io.connect('http://toogoodtowaste.us:9000/');
 
         socket.on('connect', function (data) {
             console.log('Just connected');
