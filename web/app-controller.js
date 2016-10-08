@@ -14,7 +14,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
             var today = new Date();
             var itemExpirationDate = (new Date(item.expirationDate)).setHours(0,0,0,0);
             var isToday = (new Date()).setHours(0,0,0,0) === itemExpirationDate;
-            console.log(itemExpirationDate, isToday)
+
             return isToday;
         };
 
@@ -187,8 +187,8 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
                     return i;
                 });
 
-                $scope.nextExpiringItems = items.filter(isExpiringAfterToday);
-                $scope.todaysItems = items.filter(isExpiringToday);
+                $scope.nextExpiringItems = items.filter(helper.isExpiringAfterToday);
+                $scope.todaysItems = items.filter(helper.isExpiringToday);
             }, function errorCallback(response) {
                 $scope.nextExpiringItems = [];
                 $scope.todaysItems = [];
@@ -197,7 +197,7 @@ angular.module('ToGoodToWaste', ['ngMaterial', 'ngSanitize', 'btford.socket-io']
 
         function removeItem(itemId) {
             $http({
-                url: 'http://localshost:3000/products/' + itemId,
+                url: 'http://localhost:3000/products/' + itemId,
                 method: 'DELETE'
             }).then(function () {
                 updateProducts();
